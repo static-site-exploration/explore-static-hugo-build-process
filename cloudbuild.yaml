@@ -83,7 +83,6 @@ steps:
     path: '/root/.ssh'
 
 # Add GitHub to known hosts and set up git with key and domain
-
 - name: 'gcr.io/cloud-builders/git' 
   entrypoint: 'bash'
   args:
@@ -107,4 +106,15 @@ steps:
   volumes:
   - name: 'ssh'
     path: /root/.ssh
+
+
+# SETUP GIT FOR DIST
+
+# Clone the distribution repo
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/dist'
+  - 'clone'
+  - '$_DIST_GIT_REPO_LOCATION_SSH'
 
