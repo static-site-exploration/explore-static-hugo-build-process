@@ -16,14 +16,18 @@ steps:
 # GET THE CONTENT REPO CREDENTIALS and SETUP FROM THE BUILDER IMAGE
 
 
-# PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
+# SETUP WORKSPACE DIRECTORIES
 
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
-    mkdir /workspace/content
+    mkdir -p /workspace/content
+    mkdir -p /workspace/build
+
+
+# PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
 
 - name: 'gcr.io/cloud-builders/git'
   args:
@@ -32,6 +36,7 @@ steps:
   - 'clone'
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
   - '/repo'
+
 
 # SET LAST COMMIT VARIABLE
 
