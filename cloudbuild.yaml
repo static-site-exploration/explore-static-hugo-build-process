@@ -157,7 +157,9 @@ steps:
 
 # Commit the files to local
 - name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
   args:
+  - 'git'
   - '-C'
   - '/workspace/dist'
   - 'commit'
