@@ -25,6 +25,7 @@ steps:
   - |
     mkdir -p /workspace/content
     mkdir -p /workspace/build
+    mkdir -p /workspace/dist
 
 
 # PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
