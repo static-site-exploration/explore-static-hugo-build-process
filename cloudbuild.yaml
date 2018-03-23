@@ -38,15 +38,6 @@ steps:
   - '/repo'
 
 
-# SETUP KEYS FOR GIT PUSH TO DIST REPO
-
-# Copy the encrypted file from GCS
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '$_DIST_GIT_SSH_KEY_GCS_URL', '/workspace/tmp/encrypted_key/id_rsa_build.enc']
-  volumes:
-  - name: 'ssh'
-    path: '/root/.ssh'
-
 # SET LAST COMMIT VARIABLE
 
 - name: 'gcr.io/cloud-builders/git'
@@ -66,3 +57,27 @@ steps:
   - '/workspace/build'
   - '/workspace/content/repo'
   - '/content'
+
+
+# SETUP KEYS FOR GIT PUSH TO DIST REPO
+
+# Copy the encrypted file from GCS
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', '$_DIST_GIT_SSH_KEY_GCS_URL', '/workspace/tmp/encrypted_key/id_rsa_build.enc']
+  volumes:
+  - name: 'ssh'
+    path: '/root/.ssh'
+    
+# Decrypt files in the persisted volume
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_build.enc
+  - --plaintext-file=/root/.ssh/id_rsa_build
+  - --location=global
+  - --keyring=$_DIST_GIT_SSH_KEY_KMS_KEYRING
+  - --key=$_DIST_GIT_SSH_KEY_KMS_KEY
+  volumes:
+  - name: 'ssh'
+    path: '/root/.ssh'
