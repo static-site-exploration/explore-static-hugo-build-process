@@ -31,6 +31,7 @@ steps:
     mkdir -p /workspace/content
     mkdir -p /workspace/build
     mkdir -p /workspace/dist
+    mkdir -p /workspace/data
 
 
 # SETUP THE CONTENT FOR THE BUILD
@@ -48,8 +49,8 @@ steps:
   args:
   - '-c'
   - |
-    git -C /workspace/content rev-parse HEAD | cat > workspace/data/CONTENT_GIT_COMMIT_SHA.txt
-    cat workspace/data/CONTENT_GIT_COMMIT_SHA.txt
+    cat workspace/data/CONTENT_LATEST_COMMIT_SHA.txt < (git -C /workspace/content rev-parse HEAD)
+    cat workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
   
 
 # BUILD SITE PACKAGE
@@ -175,7 +176,7 @@ steps:
   - '/workspace/dist'
   - 'commit'
   - '-m'
-  - 'Commiting files to dist'
+  - "Commiting files to dist'
   #- 'Commiting files from eval$(this)' # ? How to get this value? // could use git commit template and variables
   env:
   - 'GIT_COMMITTER_NAME=$_GIT_COMMITTER_NAME'
