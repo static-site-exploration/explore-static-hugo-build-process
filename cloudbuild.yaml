@@ -115,9 +115,10 @@ steps:
 - name: 'gcr.io/cloud-builders/git'
   args:
   - '-C'
-  - '/workspace/dist'
+  - '/workspace'
   - 'clone'
   - '$_DIST_GIT_REPO_LOCATION_SSH'
+  - '/dist'
   volumes:
   - name: 'ssh'
     path: /root/.ssh
@@ -131,7 +132,7 @@ steps:
   # clean out prepared git dist dir
   - rm -rf /workspace/dist/*
   # copy files
-  - cp /workspace/build /workspace/dist
+  - cp /workspace/build/* /workspace/dist
 
 # Add the files to git
 - name: 'gcr.io/cloud-builders/git'
