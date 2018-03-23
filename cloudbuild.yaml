@@ -132,7 +132,7 @@ steps:
   # clean out prepared git dist dir
   - rm -rf /workspace/dist/*
   # copy files
-  - cp /workspace/build/* /workspace/dist
+  - cp -a /workspace/build/. /workspace/dist
 
 # Add the files to git
 - name: 'gcr.io/cloud-builders/git'
