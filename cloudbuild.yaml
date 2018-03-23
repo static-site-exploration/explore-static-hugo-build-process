@@ -176,7 +176,7 @@ steps:
   - '/workspace/dist'
   - 'commit'
   - '-m'
-  - "Commiting files to dist'
+  - 'Commiting files to dist'
   #- 'Commiting files from eval$(this)' # ? How to get this value? // could use git commit template and variables
   env:
   - 'GIT_COMMITTER_NAME=$_GIT_COMMITTER_NAME'
