@@ -159,6 +159,8 @@ steps:
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
+  - '-c'
+  - |
   - 'git'
   - '-C'
   - '/workspace/dist'
