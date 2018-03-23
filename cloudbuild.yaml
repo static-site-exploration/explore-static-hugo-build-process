@@ -135,3 +135,11 @@ steps:
   # copy files
   - cp /workspace/build /workspace/dist
 
+# ADD THE DIST FILES
+
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/dist'
+  - 'add'
+  - '--all'
