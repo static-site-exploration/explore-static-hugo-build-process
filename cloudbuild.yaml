@@ -64,7 +64,7 @@ steps:
 
 # Copy the encrypted file from GCS
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '$_DIST_GIT_SSH_KEY_GCS_URL', '/workspace/tmp/encrypted_key/id_rsa_build.enc']
+  args: ['cp', '$_DIST_GIT_SSH_KEY_GCS_URL', '/workspace/tmp/encrypted_key/id_rsa_dist.enc']
   volumes:
   - name: 'ssh'
     path: '/root/.ssh'
@@ -74,8 +74,8 @@ steps:
   args:
   - kms
   - decrypt
-  - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_build.enc
-  - --plaintext-file=/root/.ssh/id_rsa_build
+  - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_dist.enc
+  - --plaintext-file=/root/.ssh/id_rsa_dist
   - --location=global
   - --keyring=$_DIST_GIT_SSH_KEY_KMS_KEYRING
   - --key=$_DIST_GIT_SSH_KEY_KMS_KEY
@@ -97,7 +97,7 @@ steps:
     SendEnv SSHPASS
     Hostname github.com
     User git
-    IdentityFile /root/.ssh/id_rsa_build
+    IdentityFile /root/.ssh/id_rsa_dist
     EOF
     \
     chmod 600 /root/.ssh/* 
@@ -118,4 +118,6 @@ steps:
   - '/workspace/dist'
   - 'clone'
   - '$_DIST_GIT_REPO_LOCATION_SSH'
-
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
