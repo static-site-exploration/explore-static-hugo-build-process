@@ -28,8 +28,9 @@ steps:
     mkdir -p /workspace/dist
 
 
-# PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
+# SETUP THE CONTENT FOR THE BUILD
 
+# Pull the content (Use https for now, no keys needed)
 - name: 'gcr.io/cloud-builders/git'
   args:
   - '-C'
@@ -38,9 +39,7 @@ steps:
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
   - '/repo'
 
-
-# SET LAST COMMIT VARIABLE
-
+# Save the last commit sha value in a workspace file, accessable by future steps
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
@@ -52,6 +51,7 @@ steps:
 
 # BUILD SITE PACKAGE
 
+# Run the build using the site specific build container
 - name: '$_SITE_BUILD_CONTAINER'
   args:
   # feed in arguments i) build location path, ii) content path iii) repo base folder
@@ -59,8 +59,21 @@ steps:
   - '/workspace/content/repo'
   - '/content'
 
+# Create some content for testing git commit and push
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    \
+    cat <<EOF >/workspace/content/some-content.test.md
+    /# This is a test markdown file
+    /## With some content
+    For testing purposes
+    EOF
 
-# SETUP KEYS FOR GIT PUSH TO DIST REPO
+
+# SETUP KEYS FOR GIT DIST REPO
 
 # Copy the encrypted file from GCS
 - name: 'gcr.io/cloud-builders/gsutil'
@@ -109,7 +122,7 @@ steps:
     path: /root/.ssh
 
 
-# SETUP AND PUSH TO DIST
+# SETUP DIST GIT AND PUSH THE PACKAGE
 
 # Clone the distribution repo
 - name: 'gcr.io/cloud-builders/git'
@@ -144,16 +157,7 @@ steps:
 
 # Commit the files to local
 - name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
   args:
-  - |
-  #- GIT_AUTHOR_NAME=$_GIT_AUTHOR_NAME
-  #- GIT_AUTHOR_EMAIL=$_GIT_AUTHOR_EMAIL
-  #- \
-  - GIT_COMMITTER_NAME=$_GIT_COMMITTER_NAME
-  - GIT_COMMITTER_EMAIL=$_GIT_COMMITTER_EMAIL
-  #- \
-  - |
   - 'git'
   - '-C'
   - '/workspace/dist'
@@ -161,4 +165,10 @@ steps:
   - '-m'
   - 'Commiting files to dist'
   #- 'Commiting files from eval$(this)' # ? How to get this value? // could use git commit template and variables
+  env:
+  - 'GIT_COMMITTER_NAME=$_GIT_COMMITTER_NAME'
+  - 'GIT_COMMITTER_EMAIL=$_GIT_COMMITTER_EMAIL'
+  
+ #- 'GIT_AUTHOR_NAME=$_GIT_AUTHOR_NAME'
+ #- 'GIT_AUTHOR_EMAIL=$_GIT_AUTHOR_EMAIL'
 
