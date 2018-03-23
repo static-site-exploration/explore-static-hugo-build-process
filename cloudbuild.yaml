@@ -15,7 +15,8 @@ steps:
 
 # GET THE CONTENT REPO CREDENTIALS and SETUP FROM THE BUILDER IMAGE
 
-- name: 'gcr.io/static-cloud-builders/hugo-example.tld'
+- name: 'gcr.io/cloud-builders/git'
+# - name: $
   entrypoint: 'sh'
   args:
   - 'c'
@@ -30,13 +31,24 @@ steps:
   - '-C'
   - '/workspace/content'
   - clone
-  - $CONTENT_REPO_LOCATION ## ? How to do this? > possibly with cloudbuild susbitution variables
+  - $_CONTENT_GIT_REPO_LOCATION_SSH ## ? How to do this? > possibly with cloudbuild susbitution variables
   - '/repo'
+
+# >>>>>>>>> ? GET CONTENT COMMIT SHA
+
+# git rev-parse HEAD
+
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+  - git -C /workspace/content/repo rev-parse HEAD | cat > $$_CONTENT_COMMIT_SHA
 
 
 # BUILD SITE PACKAGE
 
-- name: 'gcr.io/static-cloud-builders/hugo-constructor-example.tld'
+- name: $_SITE_BUILD_CONTAINER
   args:
   # feed in arguments i) build location path, ii) content path iii) repo base folder
   - '/workspace/build'
@@ -48,7 +60,7 @@ steps:
 
 # Copy the encrypted file from GCS
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'gs://sse-secure/keys/id_rsa_mark.dorrill@gmail.com_npw.enc', '/workspace/tmp/encrypted_key/id_rsa_build.enc']
+  args: ['cp', $_GCS_URL_GIT_SSH_KEY_DIST, '/workspace/tmp/encrypted_key/id_rsa_build.enc']
   volumes:
   - name: 'ssh'
     path: '/root/.ssh'
@@ -61,8 +73,10 @@ steps:
   - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_build.enc
   - --plaintext-file=/root/.ssh/id_rsa_build
   - --location=global
-  - --keyring=my-keyring
-  - --key=github-key
+  - --keyring=$_KMS_KEYRING_GIT_SSH_KEY_DIST
+  #my-keyring
+  - --key=$_KMS_KEY_GIT_SSH_KEY_DIST
+  #github-key
   volumes:
   - name: 'ssh'
     path: '/root/.ssh'
@@ -99,23 +113,39 @@ steps:
   - '-C'
   - '/workspace/dist'
   - clone
+  - $_DIST_GIT_REPO_LOCATION_SSH ## ? How to do this? > possibly with cloudbuild susbitution variables
   
 # COPY BUILD FILES TO DIST
 
-# ADD THE BUILD FILES
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint:["bash"]
+  args:
+  # clean out prepared git dist dir
+  - rm -rf /workspace/dist/*
+  # copy files
+  - cp /workspace/build /workspace/dist
+
+# ADD THE DIST FILES
 
 - name: 'gcr.io/cloud-builders/git'
   args:
   - '-C'
-  - '/workspace/build'
+  - '/workspace/dist'
   - add --all
 
+# COMMIT THE DIST
+
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/dist'
+  - commit -m 'Commiting files from $_CONTENT_SHA' # ? How to get this value?
 
 # PUSH THE BUILD
 
 - name: 'gcr.io/cloud-builders/git'
   args:
   - '-C'
-  - '/workspace/build'
+  - '/workspace/dist'
   - push
-  - $DIST_REPO_LOCATION ## ? How to do this? > possibly with cloudbuild susbitution variables
+  - '--force'
