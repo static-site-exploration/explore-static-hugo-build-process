@@ -33,3 +33,11 @@ steps:
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
   - '/repo'
 
+# SET LAST COMMIT VARIABLE
+
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+  - eval _CONTENT_GIT_COMMIT_SHA=$(git -C /workspace/content/repo rev-parse HEAD)"
