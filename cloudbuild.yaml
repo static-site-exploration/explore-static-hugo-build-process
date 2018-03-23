@@ -182,6 +182,9 @@ steps:
   - '/workspace/dist'
   - 'push'
   - '--force'
+  - '--set-upstream'
+  - 'origin'
+  - 'master'
   volumes:
   - name: 'ssh'
     path: /root/.ssh
