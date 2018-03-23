@@ -16,7 +16,6 @@ steps:
 # GET THE CONTENT REPO CREDENTIALS and SETUP FROM THE BUILDER IMAGE
 
 - name: 'gcr.io/cloud-builders/git'
-# - name: $
   entrypoint: 'sh'
   args:
   - 'c'
@@ -31,19 +30,17 @@ steps:
   - '-C'
   - '/workspace/content'
   - clone
-  - $_CONTENT_GIT_REPO_LOCATION_SSH ## ? How to do this? > possibly with cloudbuild susbitution variables
+  - $_CONTENT_GIT_REPO_HTTP_LOCATION
   - '/repo'
 
-# >>>>>>>>> ? GET CONTENT COMMIT SHA
-
-# git rev-parse HEAD
+# SET LAST COMMIT VARIABLE
 
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
-  - git -C /workspace/content/repo rev-parse HEAD | cat > $$_CONTENT_COMMIT_SHA
+  - eval _CONTENT_GIT_COMMIT_SHA=$(git -C /workspace/content/repo rev-parse HEAD)"
 
 
 # BUILD SITE PACKAGE
@@ -60,7 +57,7 @@ steps:
 
 # Copy the encrypted file from GCS
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', $_GCS_URL_GIT_SSH_KEY_DIST, '/workspace/tmp/encrypted_key/id_rsa_build.enc']
+  args: ['cp', $_DIST_GIT_SSH_KEY_GCS_URL, '/workspace/tmp/encrypted_key/id_rsa_build.enc']
   volumes:
   - name: 'ssh'
     path: '/root/.ssh'
@@ -73,9 +70,9 @@ steps:
   - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_build.enc
   - --plaintext-file=/root/.ssh/id_rsa_build
   - --location=global
-  - --keyring=$_KMS_KEYRING_GIT_SSH_KEY_DIST
+  - --keyring=$_DIST_GIT_SSH_KEY_KMS_KEYRING
   #my-keyring
-  - --key=$_KMS_KEY_GIT_SSH_KEY_DIST
+  - --key=$_DIST_GIT_SSH_KEY_KMS_KEY
   #github-key
   volumes:
   - name: 'ssh'
@@ -118,7 +115,7 @@ steps:
 # COPY BUILD FILES TO DIST
 
 - name: 'gcr.io/cloud-builders/git'
-  entrypoint:["bash"]
+  entrypoint: ["bash"]
   args:
   # clean out prepared git dist dir
   - rm -rf /workspace/dist/*
