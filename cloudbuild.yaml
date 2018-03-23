@@ -38,6 +38,15 @@ steps:
   - '/repo'
 
 
+# SETUP KEYS FOR GIT PUSH TO DIST REPO
+
+# Copy the encrypted file from GCS
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', '$_DIST_GIT_SSH_KEY_GCS_URL', '/workspace/tmp/encrypted_key/id_rsa_build.enc']
+  volumes:
+  - name: 'ssh'
+    path: '/root/.ssh'
+
 # SET LAST COMMIT VARIABLE
 
 - name: 'gcr.io/cloud-builders/git'
