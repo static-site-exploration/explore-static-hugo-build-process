@@ -1,7 +1,121 @@
 # pull the latest content
 
-
 # build using the prepared implimentation image
 
+# push to distribution repo
 
-# deploy somewhere if you want to
+# deploy (if needed)
+
+
+#
+# Google Cloud Builder CI configuration
+#
+
+steps:
+
+# GET THE CONTENT REPO CREDENTIALS and SETUP FROM THE BUILDER IMAGE
+
+- name: 'gcr.io/static-cloud-builders/hugo-example.tld'
+  entrypoint: 'sh'
+  args:
+  - 'c'
+  - |
+  - cp /.git-credentials /workspace/content
+
+
+# PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
+
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/content'
+  - clone
+  - $CONTENT_REPO_LOCATION ## ? How to do this? > possibly with cloudbuild susbitution variables
+  - '/repo'
+
+
+# BUILD SITE PACKAGE
+
+- name: 'gcr.io/static-cloud-builders/hugo-constructor-example.tld'
+  args:
+  # feed in arguments i) build location path, ii) content path iii) repo base folder
+  - '/workspace/build'
+  - '/workspace/content/repo'
+  - '/content'
+  
+
+# SETUP KEYS FOR GIT PUSH TO DIST REPO
+
+# Copy the encrypted file from GCS
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', 'gs://sse-secure/keys/id_rsa_mark.dorrill@gmail.com_npw.enc', '/workspace/tmp/encrypted_key/id_rsa_build.enc']
+  volumes:
+  - name: 'ssh'
+    path: '/root/.ssh'
+
+# Decrypt files in the persisted volume
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_build.enc
+  - --plaintext-file=/root/.ssh/id_rsa_build
+  - --location=global
+  - --keyring=my-keyring
+  - --key=github-key
+  volumes:
+  - name: 'ssh'
+    path: '/root/.ssh'
+       
+# Add GitHub to known hosts and set up git with key and domain
+- name: 'gcr.io/cloud-builders/git' 
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    rm -rf /workspace/tmp
+    \
+    ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+    \
+    cat <<EOF >/root/.ssh/config
+    SendEnv SSHPASS
+    Hostname github.com
+    User git
+    IdentityFile /root/.ssh/id_rsa_build
+    EOF
+    \
+    chmod 600 /root/.ssh/* 
+    chmod 644 /root/.ssh/config
+    \
+    #ssh -xvvv git@github.com
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
+# SETUP GIT CREDENTIALS / CLONE / BE ABLE TO PUSH
+
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/dist'
+  - clone
+  
+# COPY BUILD FILES TO DIST
+
+# ADD THE BUILD FILES
+
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/build'
+  - add --all
+
+
+# PUSH THE BUILD
+
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/build'
+  - push
+  - $DIST_REPO_LOCATION ## ? How to do this? > possibly with cloudbuild susbitution variables
