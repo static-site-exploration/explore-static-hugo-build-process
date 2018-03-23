@@ -81,3 +81,30 @@ steps:
   volumes:
   - name: 'ssh'
     path: '/root/.ssh'
+
+# Add GitHub to known hosts and set up git with key and domain
+
+- name: 'gcr.io/cloud-builders/git' 
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    rm -rf /workspace/tmp
+    \
+    ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+    \
+    cat <<EOF >/root/.ssh/config
+    SendEnv SSHPASS
+    Hostname github.com
+    User git
+    IdentityFile /root/.ssh/id_rsa_build
+    EOF
+    \
+    chmod 600 /root/.ssh/* 
+    chmod 644 /root/.ssh/config
+    \
+    #ssh -xvvv git@github.com
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
