@@ -152,13 +152,13 @@ steps:
     echo "Post clone dist: Directory listing for: /workspace/dist"
     ls -a /workspace/dist
     \
-  # clean out prepared git dist dir
+    # clean out prepared git dist dir
     #rm -rf /workspace/dist/*
     \
-  # ONLY FOR TESTING!
+    # ONLY FOR TESTING!
     cp -a /workspace/content/. /workspace/dist
     \
-  # copy files
+    # copy files
     cp -a /workspace/build/. /workspace/dist
     echo "Post copy build: Directory listing for: /workspace/dist"
     ls -a /workspace/dist
