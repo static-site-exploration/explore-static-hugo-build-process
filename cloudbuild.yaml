@@ -182,3 +182,7 @@ steps:
   - '/workspace/dist'
   - 'push'
   - '--force'
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
