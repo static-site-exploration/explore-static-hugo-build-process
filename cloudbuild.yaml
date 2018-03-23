@@ -50,6 +50,7 @@ steps:
   - '-c'
   - |
     git -C /workspace/content rev-parse HEAD > /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
+    echo "Displaying value of: /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt"
     cat /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
   
 
@@ -148,14 +149,19 @@ steps:
   args:
   - '-c'
   - |
-    echo "Directory listing for: /workspace/dist"
+    echo "Post clone dist: Directory listing for: /workspace/dist"
     ls -a /workspace/dist
-  
+    \
   # clean out prepared git dist dir
-  #- rm -rf /workspace/dist/*
+    #rm -rf /workspace/dist/*
+    \
+  # ONLY FOR TESTING!
+    cp -a /workspace/content/. /workspace/dist
+    \
   # copy files
-  #- cp -a /workspace/build/. /workspace/dist
-
+    cp -a /workspace/build/. /workspace/dist
+    echo "Post copy build: Directory listing for: /workspace/dist"
+    ls -a /workspace/dist
 
 # Add the files to git
 - name: 'gcr.io/cloud-builders/git'
