@@ -49,8 +49,8 @@ steps:
   args:
   - '-c'
   - |
-    'cat workspace/data/CONTENT_LATEST_COMMIT_SHA.txt < (git -C /workspace/content rev-parse HEAD)'
-    cat workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
+    git -C /workspace/content rev-parse HEAD > /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
+    cat /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
   
 
 # BUILD SITE PACKAGE
