@@ -126,8 +126,10 @@ steps:
 # COPY BUILD FILES TO DIST
 
 - name: 'gcr.io/cloud-builders/git'
-  entrypoint: ["bash"]
+  entrypoint: 'bash'
   args:
+  - '-c'
+  |
   # clean out prepared git dist dir
   - rm -rf /workspace/dist/*
   # copy files
