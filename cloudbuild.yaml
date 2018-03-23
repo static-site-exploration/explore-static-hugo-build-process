@@ -19,7 +19,7 @@ steps:
 # PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
 
 - name: 'gcr.io/cloud-builders/git'
-  entrypoint: ["bash"]
+  entrypoint: ['bash']
   args:
   - '-c'
   - '|'
