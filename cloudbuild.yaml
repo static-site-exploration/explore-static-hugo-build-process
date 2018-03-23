@@ -35,8 +35,8 @@ steps:
   args:
   - '-C'
   - '/workspace/content'
-  - clone
-  - $_CONTENT_GIT_REPO_HTTP_LOCATION
+  - 'clone'
+  - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
   - '/repo'
 
 # SET LAST COMMIT VARIABLE
@@ -115,8 +115,9 @@ steps:
   args:
   - '-C'
   - '/workspace/dist'
-  - clone
-  - $_DIST_GIT_REPO_LOCATION_SSH ## ? How to do this? > possibly with cloudbuild susbitution variables
+  - 'clone'
+  - '$_DIST_GIT_REPO_LOCATION_SSH'
+  ## ? How to do this? > possibly with cloudbuild susbitution variables
   
 # COPY BUILD FILES TO DIST
 
@@ -134,7 +135,8 @@ steps:
   args:
   - '-C'
   - '/workspace/dist'
-  - add --all
+  - 'add'
+  - '--all'
 
 # COMMIT THE DIST
 
@@ -142,7 +144,9 @@ steps:
   args:
   - '-C'
   - '/workspace/dist'
-  - commit -m 'Commiting files from $_CONTENT_SHA' # ? How to get this value?
+  - 'commit'
+  - '-m'
+  - 'Commiting files from $_CONTENT_SHA' # ? How to get this value?
 
 # PUSH THE BUILD
 
@@ -150,5 +154,5 @@ steps:
   args:
   - '-C'
   - '/workspace/dist'
-  - push
+  - 'push'
   - '--force'
