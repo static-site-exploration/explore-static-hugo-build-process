@@ -109,7 +109,7 @@ steps:
     path: /root/.ssh
 
 
-# SETUP GIT FOR DIST
+# SETUP AND PUSH TO DIST
 
 # Clone the distribution repo
 - name: 'gcr.io/cloud-builders/git'
@@ -122,9 +122,7 @@ steps:
   - name: 'ssh'
     path: /root/.ssh
 
-
-# COPY BUILD FILES TO DIST
-
+# Empty the cloned dist directory and add the recently built files 
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
@@ -135,11 +133,21 @@ steps:
   # copy files
   - cp /workspace/build /workspace/dist
 
-# ADD THE DIST FILES
-
+# Add the files to git
 - name: 'gcr.io/cloud-builders/git'
   args:
   - '-C'
   - '/workspace/dist'
   - 'add'
   - '--all'
+
+# Commit the files to local
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - '-C'
+  - '/workspace/dist'
+  - 'commit'
+  - '-m'
+  - 'Commiting files to dist'
+  #- 'Commiting files from eval$(this)' # ? How to get this value? // could use git commit template and variables
+
