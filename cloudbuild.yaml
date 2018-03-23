@@ -42,3 +42,13 @@ steps:
   - |
   - eval local_CONTENT_GIT_COMMIT_SHA=$(git -C /workspace/content/repo rev-parse HEAD)"
   - git -C /workspace/content/repo rev-parse HEAD | cat > workspace/data/CONTENT_GIT_COMMIT_SHA.txt
+
+
+# BUILD SITE PACKAGE
+
+- name: '$_SITE_BUILD_CONTAINER'
+  args:
+  # feed in arguments i) build location path, ii) content path iii) repo base folder
+  - '/workspace/build'
+  - '/workspace/content/repo'
+  - '/content'
