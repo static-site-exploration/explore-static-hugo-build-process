@@ -177,11 +177,12 @@ steps:
 
 
 - name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
   args:
-  - '-C'
-  - '/workspace/dist'
-  - 'remote'
-  - '-v'
+  - '-c'
+  - |
+    git -C /workspace/dist remote -v
+    ls /workspace/dist
 
 # Push to remote
 - name: 'gcr.io/cloud-builders/git'
