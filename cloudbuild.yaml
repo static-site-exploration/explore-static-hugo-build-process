@@ -19,6 +19,13 @@ steps:
 # PULL CONTENT FROM CONTENT REPO (Use https for now, no keys needed)
 
 - name: 'gcr.io/cloud-builders/git'
+  entrypoint: ["bash"]
+  args:
+  - '-c'
+  - '|'
+  - 'mkdir /workspace/content'
+
+- name: 'gcr.io/cloud-builders/git'
   args:
   - '-C'
   - '/workspace/content'
