@@ -127,11 +127,9 @@ steps:
 # Clone the distribution repo
 - name: 'gcr.io/cloud-builders/git'
   args:
-  - '-C'
-  - '/workspace'
   - 'clone'
   - '$_DIST_GIT_REPO_LOCATION_SSH'
-  - '/dist'
+  - '/workspace/dist'
   volumes:
   - name: 'ssh'
     path: /root/.ssh
@@ -142,8 +140,9 @@ steps:
   args:
   - '-c'
   - |
-  # clean out prepared git dist dir
   - ls -a /workspace/dist
+  
+  # clean out prepared git dist dir
   #- rm -rf /workspace/dist/*
   # copy files
   #- cp -a /workspace/build/. /workspace/dist
