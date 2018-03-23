@@ -121,3 +121,15 @@ steps:
   volumes:
   - name: 'ssh'
     path: /root/.ssh
+
+
+# COPY BUILD FILES TO DIST
+
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: ["bash"]
+  args:
+  # clean out prepared git dist dir
+  - rm -rf /workspace/dist/*
+  # copy files
+  - cp /workspace/build /workspace/dist
+
