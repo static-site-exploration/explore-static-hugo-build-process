@@ -40,4 +40,5 @@ steps:
   args:
   - '-c'
   - |
-  - eval _CONTENT_GIT_COMMIT_SHA=$(git -C /workspace/content/repo rev-parse HEAD)"
+  - eval local_CONTENT_GIT_COMMIT_SHA=$(git -C /workspace/content/repo rev-parse HEAD)"
+  - git -C /workspace/content/repo rev-parse HEAD | cat > workspace/data/CONTENT_GIT_COMMIT_SHA.txt
