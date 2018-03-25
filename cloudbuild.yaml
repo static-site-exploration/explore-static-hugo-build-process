@@ -71,6 +71,7 @@ steps:
     ls
     pwd
     ls /
+    ls /workspace
 
 - name: '$_SITE_BUILD_CONTAINER'
   args:
