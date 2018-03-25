@@ -4,7 +4,7 @@
 
 options:
 
-    #substitution_option: 'ALLOW_LOOSE'
+    substitution_option: 'ALLOW_LOOSE'
 
 substitutions:
       
@@ -34,7 +34,7 @@ steps:
 - name: 'gcr.io/cloud-builders/git'
   args:
   - 'clone'
-  - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
+  - '$_REPO_URL_HTTPS_CONTENT'
   - '${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}'
 
 # Save the last commit sha value in a workspace file, accessable by future steps
