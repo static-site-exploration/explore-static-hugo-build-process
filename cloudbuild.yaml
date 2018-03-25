@@ -68,9 +68,11 @@ steps:
   args:
   - '-c'
   - |
-    ls
+    echo "PWD:"
     pwd
+    echo "LS: ROOT"
     ls /
+    echo "LS: WORKSPACE"
     ls /workspace
 
 - name: '$_SITE_BUILD_CONTAINER'
