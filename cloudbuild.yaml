@@ -42,16 +42,6 @@ steps:
   - 'clone'
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
   - '/content/repo'
-
-# Save the last commit sha value in a workspace file, accessable by future steps
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    git -C /workspace/content rev-parse HEAD > /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
-    echo "Displaying value of: /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt"
-    cat /workspace/data/CONTENT_LATEST_COMMIT_SHA.txt
   
 
 # BUILD SITE PACKAGE
