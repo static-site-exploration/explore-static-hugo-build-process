@@ -43,12 +43,12 @@ steps:
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
   - '/workspace/content/repo'
 
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    find /workspace/content/repo type -d 
+#- name: 'gcr.io/cloud-builders/git'
+#  entrypoint: 'bash'
+#  args:
+#  - '-c'
+#  - |
+#    find /workspace/content/repo type -d 
 
 # Save the last commit sha value in a workspace file, accessable by future steps
 #- name: 'gcr.io/cloud-builders/git'
@@ -73,7 +73,7 @@ steps:
   # DO NOT INCLUDE /workspace !! currently wont work
   - './content/repo/$_DIR_NAME_CONTENT'
   #- '--destination'
-  - './workspace/build'
+  - './build'
 
 # Check the build is in the right place
 - name: 'gcr.io/cloud-builders/git'
