@@ -69,4 +69,6 @@ steps:
   - '-c'
   - |
     ls
+    pwd
+    ls /
 
