@@ -1,25 +1,20 @@
-# pull the latest content
-
-# build using the prepared implimentation image
-
-# push to distribution repo
-
-# deploy (if needed)
-
-
 #
 # Google Cloud Builder CI configuration
 #
 
 options:
 
-    substitution_option: 'ALLOW_LOOSE'
+    #substitution_option: 'ALLOW_LOOSE'
 
-
+substitutions:
+      
+    _BUILD_BASE_DIR_PACKAGE: '/workspace/package'    
+    _BUILD_BASE_DIR_DEST: '/workspace/build'
+    _BUILD_BASE_DIR_DATA: '/workspace/data'
+    
+    _PACKAGE_BASE_DIR_REPO_CONTENT: 'content/repo'
+   
 steps:
-
-# GET THE CONTENT REPO CREDENTIALS and SETUP FROM THE BUILDER IMAGE
-
 
 # SETUP WORKSPACE DIRECTORIES
 
@@ -28,10 +23,9 @@ steps:
   args:
   - '-c'
   - |
-    mkdir -p /workspace/content
-    mkdir -p /workspace/build
-    mkdir -p /workspace/dist
-    mkdir -p /workspace/data
+    mkdir -p ${_BUILD_BASE_DIR_PACKAGE}
+    mkdir -p ${_BUILD_BASE_DIR_DEST}
+    mkdir -p ${_BUILD_BASE_DIR_DATA}
 
 
 # SETUP THE CONTENT FOR THE BUILD
@@ -41,14 +35,7 @@ steps:
   args:
   - 'clone'
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
-  - '/workspace/content/repo'
-
-#- name: 'gcr.io/cloud-builders/git'
-#  entrypoint: 'bash'
-#  args:
-#  - '-c'
-#  - |
-#    find /workspace/content/repo type -d 
+  - '${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}'
 
 # Save the last commit sha value in a workspace file, accessable by future steps
 #- name: 'gcr.io/cloud-builders/git'
@@ -62,27 +49,23 @@ steps:
 
 # BUILD SITE PACKAGE
 
-# Test run the site specific build container (without arguments should build locally with test content and paths)
-- name: '$_SITE_BUILD_CONTAINER'
-  entrypoint: 'sh'
-  args:
-  - '-c'
-  - |
-    #echo "PWD:"
-    #pwd
-    #echo "LS: ROOT"
-    #ls /
-    #echo "LS: WORKSPACE"
-    #ls /workspace
-
 - name: '$_SITE_BUILD_CONTAINER'
   args:
   - 'a_testing_variable_value'
   - 'another_variable_for_testing'
+  
+- name: '$_SITE_BUILD_CONTAINER'
+  env:
+  - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
+  #- 'BUILD_DIR=${_BUILD_BASE_DIR_DEST}/'
 
 - name: '$_SITE_BUILD_CONTAINER'
-  entrypoint: 'sh'
-  args:
-  - '-c'
-  - |
-    ls /workspace
+  env:
+  #- 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
+  - 'BUILD_DIR=${_BUILD_BASE_DIR_DEST}'
+
+- name: '$_SITE_BUILD_CONTAINER'
+  env:
+  - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
+  - 'BUILD_DIR=${_BUILD_BASE_DIR_DEST}'  
+  
