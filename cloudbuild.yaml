@@ -66,5 +66,7 @@ steps:
 - name: '$_SITE_BUILD_CONTAINER'
   entrypoint: 'sh'
   args:
-  - 'ls'
+  - '-c'
+  - |
+    ls
 
