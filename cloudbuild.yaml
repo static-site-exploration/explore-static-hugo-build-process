@@ -71,9 +71,9 @@ steps:
   # feed in arguments i) build location path, ii) content path iii) repo base folder
   #- '--contentDir'
   # DO NOT INCLUDE /workspace !! currently wont work
-  - './content/repo/$_DIR_NAME_CONTENT'
+  - '/content/repo/$_DIR_NAME_CONTENT'
   #- '--destination'
-  - './build'
+  - '/build'
 
 # Check the build is in the right place
 - name: 'gcr.io/cloud-builders/git'
