@@ -56,6 +56,9 @@ steps:
 
 # BUILD SITE PACKAGE
 
+# Test run the site specific build container (without arguments should build locally with test content and paths)
+- name: '$_SITE_BUILD_CONTAINER'
+
 # Run the build using the site specific build container
 - name: '$_SITE_BUILD_CONTAINER'
   args:
