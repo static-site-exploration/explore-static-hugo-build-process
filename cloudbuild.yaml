@@ -41,14 +41,14 @@ steps:
   args:
   - 'clone'
   - '$_CONTENT_GIT_REPO_HTTP_LOCATION'
-  - '/content/repo'
+  - '/workspace/content/repo'
 
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
-    find /content/repo type -d 
+    find /workspace/content/repo type -d 
 
 # Save the last commit sha value in a workspace file, accessable by future steps
 #- name: 'gcr.io/cloud-builders/git'
