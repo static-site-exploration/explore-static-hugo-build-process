@@ -78,7 +78,7 @@ steps:
   args:
   - '-c'
   - |
-    find  ${_BUILD_BASE_DIR_BUILD}.
+    find  ${_BUILD_BASE_DIR_BUILD}/.
     
 #####################################################
 ################### TESTING ONLY ####################
