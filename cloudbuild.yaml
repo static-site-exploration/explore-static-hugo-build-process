@@ -49,8 +49,20 @@ steps:
 
 # BUILD SITE PACKAGE
 
-- name: '$_SITE_BUILD_CONTAINER'
-  args:
-  - 'a_testing_variable_value'
-  - 'another_variable_for_testing'
+#- name: '$_SITE_BUILD_CONTAINER'
+#  args:
+#  - 'a_testing_variable_value'
+#  - 'another_variable_for_testing'
   
+- name: '$_SITE_BUILD_CONTAINER'
+  env:
+  - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
+
+- name: '$_SITE_BUILD_CONTAINER'
+  env:
+  - 'BUILD_DIR=${_BUILD_BASE_DIR_DEST}'
+
+- name: '$_SITE_BUILD_CONTAINER'
+  env:
+  - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
+  - 'BUILD_DIR=${_BUILD_BASE_DIR_DEST}'  
