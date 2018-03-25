@@ -68,16 +68,17 @@ steps:
   args:
   - '-c'
   - |
-    echo "PWD:"
-    pwd
-    echo "LS: ROOT"
-    ls /
-    echo "LS: WORKSPACE"
-    ls /workspace
+    #echo "PWD:"
+    #pwd
+    #echo "LS: ROOT"
+    #ls /
+    #echo "LS: WORKSPACE"
+    #ls /workspace
 
 - name: '$_SITE_BUILD_CONTAINER'
   args:
   - 'a_testing_variable_value'
+
 
 - name: '$_SITE_BUILD_CONTAINER'
   entrypoint: 'sh'
