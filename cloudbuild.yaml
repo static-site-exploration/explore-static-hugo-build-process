@@ -171,7 +171,7 @@ steps:
   env:
   - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
   #- 'BUILD_DIR=${_BUILD_BASE_DIR_BUILD}'  
-  - 'BUILD_DIR=${_BUILD_BASE_DIR_DEST}'  
+  - 'BUILD_DIR=${_BUILD_BASE_DIR_DIST}'  
   
 #####################################################
 ################### TESTING ONLY ####################
@@ -182,7 +182,7 @@ steps:
   args:
   - '-c'
   - |
-    find  ${_BUILD_BASE_DIR_DEST}/.
+    find  ${_BUILD_BASE_DIR_DIST}/.
 
 #####################################################
 ################### TESTING ONLY ####################
@@ -194,7 +194,7 @@ steps:
   - '-c'
   - |
     \
-    cat <<EOF >${_BUILD_BASE_DIR_DEST}/BUILD${BUILD_ID}
+    cat <<EOF >${_BUILD_BASE_DIR_DIST}/BUILD${BUILD_ID}
     This is a unique file for build ${BUILD_ID} in the ${PROJECT_ID} project.
     EOF
  
