@@ -192,7 +192,7 @@ steps:
   - '-c'
   - |
     \
-    cat <<EOF >${_BUILD_BASE_DIR_DEST}/BUILD${BUILD_ID}-${RANDOM}
+    cat <<EOF >${_BUILD_BASE_DIR_DEST}/BUILD${BUILD_ID}
     This is a unique file for build ${BUILD_ID} in the ${PROJECT_ID} project.
     EOF
  
