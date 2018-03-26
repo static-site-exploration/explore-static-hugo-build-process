@@ -147,12 +147,14 @@ steps:
   - '-c'
   - |
     mkdir /workspace/tmp
-    mv ${_BUILD_BASE_DIR_DIST}/.git /workspace/tmp/.git
+    mv -v ${_BUILD_BASE_DIR_DIST}/.git /workspace/tmp
+    test /workspace/tmp/.git
     \
     # clean out prepared git dist dir
-    rm -rf ${_BUILD_BASE_DIR_DIST}*
+    rm -rf ${_BUILD_BASE_DIR_DIST}/*
     # put git back
-    mv /workspace/tmp/.git ${_BUILD_BASE_DIR_DIST}/.git
+    mv -v /workspace/tmp/.git ${_BUILD_BASE_DIR_DIST}
+    test ${_BUILD_BASE_DIR_DIST}/.git
     rmdir /workspace/tmp
 
 # Stage added and deleted files to git
