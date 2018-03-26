@@ -194,7 +194,7 @@ steps:
   - '-c'
   - |
     \
-    cat <<EOF >${_BUILD_BASE_DIR_DIST}/BUILD${BUILD_ID}
+    cat <<EOF >${_BUILD_BASE_DIR_DIST}/${BUILD_ID}.BUILD
     This is a unique file for build ${BUILD_ID} in the ${PROJECT_ID} project.
     EOF
  
