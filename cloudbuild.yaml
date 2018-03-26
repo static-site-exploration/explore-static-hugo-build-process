@@ -190,8 +190,13 @@ steps:
     # ONLY FOR TESTING!
     #cp -a /workspace/content/. /workspace/dist
     \
-    # copy files
-    cp -a ${_BUILD_BASE_DIR_BUILD}/. ${_BUILD_BASE_DIR_DIST}
+    # copy files and remove anything gitty from build dir
+    rm -rf ${_BUILD_BASE_DIR_BUILD}/.git
+    cp -a ${_BUILD_BASE_DIR_BUILD}/* ${_BUILD_BASE_DIR_DIST}
+    #
+    # use rsync to try and prevent .git folder being copied
+    #rsync -vazC ${_BUILD_BASE_DIR_BUILD}/* ${_BUILD_BASE_DIR_DIST}/BUILD-${BUILD_ID}
+    #
     echo "Post copy build: Directory listing for: ${_BUILD_BASE_DIR_DIST}"
     ls -a ${_BUILD_BASE_DIR_DIST}
 
