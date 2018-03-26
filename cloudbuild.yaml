@@ -191,7 +191,7 @@ steps:
     #cp -a /workspace/content/. /workspace/dist
     \
     # copy files
-    cp -a ${_BUILD_BASE_DIR_BUILD}. ${_BUILD_BASE_DIR_DIST}
+    cp -a ${_BUILD_BASE_DIR_BUILD}/. ${_BUILD_BASE_DIR_DIST}
     echo "Post copy build: Directory listing for: ${_BUILD_BASE_DIR_DIST}"
     ls -a ${_BUILD_BASE_DIR_DIST}
 
