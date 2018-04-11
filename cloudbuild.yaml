@@ -171,8 +171,8 @@ steps:
 - name: '$_SITE_BUILD_CONTAINER'
   env:
   - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
-  #- 'BUILD_DIR=${_BUILD_BASE_DIR_BUILD}'  
-  - 'BUILD_DIR=${_BUILD_BASE_DIR_DIST}'  
+  - 'BUILD_DIR=${_BUILD_BASE_DIR_DIST}'
+  - 'BASE_URL=${_BASE_URL}'
   
 #####################################################
 ################### TESTING ONLY ####################
