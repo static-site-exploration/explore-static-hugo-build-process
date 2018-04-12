@@ -211,7 +211,7 @@ steps:
   args:
   - '-c'
   - |
-    git -C ${_BUILD_BASE_DIR_DIST} commit -m 'DIST from CONTENT commit: $(cat /workspace/content/.git/refs/heads/master) repo: $(git -C /workspace/content remote get-url origin ) BUILD: ${BUILD_ID}'
+    git -C ${_BUILD_BASE_DIR_DIST} commit -m "DIST from CONTENT commit: $(cat /workspace/content/.git/refs/heads/master) repo: $(git -C /workspace/content remote get-url origin ) BUILD: ${BUILD_ID}"
 
 #- name: 'gcr.io/cloud-builders/git'
 #  args:
