@@ -207,14 +207,21 @@ steps:
 
 # Commit the files to local
 - name: 'gcr.io/cloud-builders/git'
+  entrypoint: 'bash'
   args:
-  - '-C'
-  - '${_BUILD_BASE_DIR_DIST}'
-  - 'commit'
-  - '-m'
+  - '-c'
+  - |
+    git -C ${_BUILD_BASE_DIR_DIST} commit -m 'DIST from CONTENT commit: $(cat /workspace/content/.git/refs/heads/master) repo: $(git -C /workspace/content remote get-url origin ) BUILD: ${BUILD_ID}'
+
+#- name: 'gcr.io/cloud-builders/git'
+#  args:
+#  - '-C'
+#  - '${_BUILD_BASE_DIR_DIST}'
+#  - 'commit'
+#  - '-m'
   #- 'Commiting files to dist for ${BUILD_ID}'
   # UPDATE THIS MESSAGE TO USE GIT COMMIT ID OF CONTENT REPO USED
-  - 'Dist created from Content commit id: $(cat /workspace/content/.git/refs/heads/master) from repo $(git -C /workspace/content remote get-url origin ) using Google Cloud Builder build: ${BUILD_ID}'
+#  - 'Dist created from Content commit id: $(cat /workspace/content/.git/refs/heads/master) from repo $(git -C /workspace/content remote get-url origin ) using Google Cloud Builder build: ${BUILD_ID}'
 
 # Push to remote
 - name: 'gcr.io/cloud-builders/git'
