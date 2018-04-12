@@ -5,7 +5,6 @@
 options:
 
     substitution_option: 'ALLOW_LOOSE'
-    #machineType: 'N1_HIGHCPU_8'
 
 substitutions:
       
@@ -166,8 +165,7 @@ steps:
   - 'add'
   - '--all'
 
-# BUILD SITE PACKAGE
-
+# Build the site package
 - name: '$_SITE_BUILD_CONTAINER'
   env:
   - 'CONTENT_DIR=${_BUILD_BASE_DIR_PACKAGE}/${_PACKAGE_BASE_DIR_REPO_THEME}/$_DIR_NAME_CONTENT'
@@ -178,12 +176,12 @@ steps:
 ################### TESTING ONLY ####################
 #####################################################
 # Check the build is in the right place
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    find  ${_BUILD_BASE_DIR_DIST}/.
+#- name: 'gcr.io/cloud-builders/git'
+#  entrypoint: 'bash'
+#  args:
+#  - '-c'
+#  - |
+#    find  ${_BUILD_BASE_DIR_DIST}/.
 
 #####################################################
 ################### TESTING ONLY ####################
@@ -207,13 +205,6 @@ steps:
   - 'add'
   - '--all'
 
-# Display status (for testing)
-#- name: 'gcr.io/cloud-builders/git'
-#  args:
-#  - '-C'
-#  - '${_BUILD_BASE_DIR_DIST}'
-#  - 'status'
-
 # Commit the files to local
 - name: 'gcr.io/cloud-builders/git'
   args:
@@ -221,14 +212,9 @@ steps:
   - '${_BUILD_BASE_DIR_DIST}'
   - 'commit'
   - '-m'
-  - 'Commiting files to dist for ${BUILD_ID}'
-
-# Display status (for testing)
-#- name: 'gcr.io/cloud-builders/git'
-#  args:
-#  - '-C'
-#  - '${_BUILD_BASE_DIR_DIST}'
-#  - 'status'
+  #- 'Commiting files to dist for ${BUILD_ID}'
+  # UPDATE THIS MESSAGE TO USE GIT COMMIT ID OF CONTENT REPO USED
+  - 'Dist created from Content commit id: $(cat /workspace/content/.git/refs/heads/master) from repo $(git -C /workspace/content remote get-url origin ) using Google Cloud Builder build: ${BUILD_ID}'
 
 # Push to remote
 - name: 'gcr.io/cloud-builders/git'
