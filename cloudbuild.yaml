@@ -68,12 +68,12 @@ steps:
   args:
   - kms
   - decrypt
-  - --project=_DIST_GIT_SSH_KEY_KMS_PROJECT_ID
+  - --project=${_DIST_GIT_SSH_KEY_KMS_PROJECT_ID}
   - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_dist.enc
   - --plaintext-file=/root/.ssh/id_rsa_dist
   - --location=global
-  - --keyring=$_DIST_GIT_SSH_KEY_KMS_KEYRING
-  - --key=$_DIST_GIT_SSH_KEY_KMS_KEY
+  - --keyring=${_DIST_GIT_SSH_KEY_KMS_KEYRING}
+  - --key=${_DIST_GIT_SSH_KEY_KMS_KEY}
   volumes:
   - name: 'ssh'
     path: '/root/.ssh'
