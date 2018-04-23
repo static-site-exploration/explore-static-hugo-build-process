@@ -67,6 +67,7 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
   - kms
+  --project=_DIST_GIT_SSH_KEY_KMS_PROJECT_ID
   - decrypt
   - --ciphertext-file=/workspace/tmp/encrypted_key/id_rsa_dist.enc
   - --plaintext-file=/root/.ssh/id_rsa_dist
